@@ -1,0 +1,39 @@
+* {
+	box-sizing: border-box;
+}
+
+h1 {text-align: center;}
+
+
+/*Form*/
+#search-form { text-align: center; }
+.form-buttons { display: block; }
+
+
+/*Display Flights*/
+.flights-list {
+	list-style: none;
+	margin: 0 auto;
+	width: 80%;
+    max-width: 750px;
+    padding-left: 0;
+}
+
+.flight-entry {
+	text-align: center;
+	border: 2px solid black;
+	margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+#close {
+    float:right;
+    display:inline-block;
+    padding:0px 2px;
+    background:#ccc;
+}
+
+#close:hover {
+	color:#fff;
+}

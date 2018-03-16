@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Flight App</title>
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/datepicker.css">
+  <!-- Normalize -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css">
+
+</head>
+<body>
+
+<div class="container">
+
+	<h1>Flight App</h1>
+
+
+	<form id="search-form" action="#">
+		<label for="flight-query">Flight information:</label>
+		<input type="text" name="flight-query" id="flight-query" placeholder="Enter airline code and flight ID"/>
+    <input type="text" id="datepicker"></input>
+		<div class="form-buttons">
+	    	<button id="add-flight-button">Add Flight</button>
+	    	<button id="reset-flights-button">Reset</button>
+	    </div>
+	</form>
+
+
+	<ul class="flights-list">
+		<!-- <li>
+			<span id='close'>x</span>
+			<div class="flight-identification">JBU1234</div>
+			<div class="flight-locations">JFK - LAX</div>
+			<div class="flight-status">Schedule On-Time</div>
+			<div class="flight-arrival">ETA: 12:30 PST</div>
+		</li> -->
+	</ul>
+
+</div>
+
+
+
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- jQuery UI -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<!-- Config -->
+<!-- <script type='text/javascript' src='config.js'></script> -->
+<!-- javaScript -->
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>
