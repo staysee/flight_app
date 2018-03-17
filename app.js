@@ -1,10 +1,35 @@
 'use strict';
-// const APP_ID = config.APP_ID;
-// const API_KEY = config.API_KEY;
-//const URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/status/UA/2008/arr/2018/03/13?appId=' + APP_ID + '&appKey=' + API_KEY + '&utc=false'
-const TEST_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?airline=WN&flight_number=2115';
+const APP_ID = config.APP_ID;
+const API_KEY = config.API_KEY;
+const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/'
+// const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?airline=WN&flight_number=2115';
 
 
+// API
+function getDataFromApi(){
+  $.ajax({
+    url: BASE_URL,
+    method: 'GET',
+    dataType: 'json',
+    appId: APP_ID,
+    appKey: API_KEY,
+    carrier:'SWA',
+    flight: '2993',
+    year: '2018',
+    month: '03',
+    day: '16',
+    success: function(data){
+      console.log(data);
+      console.log('Flight Status: ' + data.flightStatuses[0].status);
+      console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
+      console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
+      console.log('ETA: ' + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      console.log(textStatus);
+    }
+  });
+}
 
 // State Object
 var state = {
@@ -31,39 +56,27 @@ function renderList (state, element){
     return `
       <li class="flight-entry">
         <span id='close'>x</span>
-        <div class="temp-flight">`+ flight + `</div>
-        <div class="flight-identification">JBU1234</div>
-        <div class="flight-locations">JFK --> LAX</div>
-        <div class="flight-status">Schedule On-Time</div>
-        <div class="flight-arrival">ETA: 12:30 PST</div>
+        <div class="temp-flight"></div>
+        <div class="flight-identification"></div>
+        <div class="flight-locations"></div>
+        <div class="flight-status"></div>
+        <div class="flight-arrival">ETA:</div>
       </li>
     `
   })
   element.html(itemsHTML);
 }
 
-// API
-function getDataFromApi(){
-  $.ajax({
-    url: TEST_URL,
-    dataType: 'json',
-    success: function(data){
-      console.log(data);
-      console.log('Flight Status: ' + data.flightStatuses[0].status);
-      console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
-      console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
-      console.log('ETA: ' + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
-    },
-    error: function(jqXHR, textStatus, errorThrown){
-      console.log(textStatus);
-    }
-  });
-}
+
 
 
 // Event Listeners
 function calendar(){
-  $('#datepicker').datepicker();
+  $('#datepicker').datepicker({
+    inline: true,
+    showOtherMonths: true,
+    dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  });
 }
 
 function handleAddFlight(){
@@ -71,8 +84,8 @@ function handleAddFlight(){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
     getDataFromApi();
-    addFlight(state, $('#flight-query').val());
-    renderList(state, $('.flights-list'))
+    addFlight(state, $('#traveler-name').val());
+    renderList(state, $('.flights-list'));
 
   })
 }
