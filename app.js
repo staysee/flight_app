@@ -96,8 +96,22 @@ function handleAddFlight(){
     $('#traveler-name').val("");
     $('#flight-query').val("");
     $('#datepicker').val("");
+
   })
 }
+
+
+// flights: [
+//   flight = {
+//     traveler_name: $('#traveler_name').val();
+//     airline_code:  $('#flight-query').val().match(/^[a-zA-Z]*/);
+//     flight_number: $('#flight-query').val().match(/[0-9]*$/);
+//     departure_date: $('#datepicker').val();
+//   }
+// ]
+
+
+
 
 function handleDeleteFlight(){
   $('.flights-list').on('click', '#close', function(event){
@@ -124,4 +138,3 @@ $(calendar)
 $(handleAddFlight)
 $(handleDeleteFlight)
 $(handleResetButton)
-
