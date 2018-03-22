@@ -1,29 +1,34 @@
 'use strict';
-const APP_ID = config.APP_ID;
-const API_KEY = config.API_KEY;
-const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/'
-// const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?airline=WN&flight_number=2115';
+//const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
+const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
 
 
 // API
 function getDataFromApi(){
+  var flightquery = $('#flight-query').val();
+  var airline_code = flightquery.match(/^[a-zA-z]*/);
+  var flight_number = flightquery.match(/[0-9]*$/);
+
+  var flightdate = $('#datepicker').val();
+  var dateArray = flightdate.split("/");
+  var dep_month = dateArray[0];
+  var dep_day = dateArray[1];
+  var dep_year = dateArray[2];
+  //console.log(flightdate);
+  //console.log(dep_month);
+  //console.log(dep_day);
+  //console.log(dep_year);
+
   $.ajax({
-    url: BASE_URL,
+    url: BASE_URL + 'airline=' + airline_code + '&flight_number=' + flight_number + '&year=' + dep_year + '&month=' + dep_month + '&day=' + dep_day,
     method: 'GET',
-    dataType: 'json',
-    appId: APP_ID,
-    appKey: API_KEY,
-    carrier:'SWA',
-    flight: '2993',
-    year: '2018',
-    month: '03',
-    day: '16',
     success: function(data){
       console.log(data);
       console.log('Flight Status: ' + data.flightStatuses[0].status);
       console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
       console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
       console.log('ETA: ' + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
+      renderList(state, $('.flights-list'), data);
     },
     error: function(jqXHR, textStatus, errorThrown){
       console.log(textStatus);
@@ -51,16 +56,17 @@ function deleteFlight (state, itemIndex){
 }
 
 // Rendering
-function renderList (state, element){
+function renderList (state, element, data){
   var itemsHTML = state.flights.map(function(flight){
     return `
       <li class="flight-entry">
         <span id='close'>x</span>
         <div class="temp-flight"></div>
+        <div class="flight-traveler"></div>
         <div class="flight-identification"></div>
-        <div class="flight-locations"></div>
-        <div class="flight-status"></div>
-        <div class="flight-arrival">ETA:</div>
+        <div class="flight-locations">Departure Airport: ` + data.flightStatuses[0].departureAirportFsCode + `Arrival Airport: ` + data.flightStatuses[0].arrivalAirportFsCode + ` </div>
+        <div class="flight-status"> Flight Status: ` + data.flightStatuses[0].status + `</div>
+        <div class="flight-arrival">ETA: ` + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal + `</div>
       </li>
     `
   })
@@ -85,7 +91,7 @@ function handleAddFlight(){
     console.log('Clicked Add Flight Button')
     getDataFromApi();
     addFlight(state, $('#traveler-name').val());
-    renderList(state, $('.flights-list'));
+    // renderList(state, $('.flights-list'));
 
   })
 }
@@ -111,7 +117,8 @@ function handleResetButton(){
   })
 }
 
-$(calendar);
+$(calendar)
 $(handleAddFlight)
 $(handleDeleteFlight)
 $(handleResetButton)
+

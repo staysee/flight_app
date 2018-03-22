@@ -1,8 +1,14 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 h1 {text-align: center;}
+
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Dosis', sans-serif;
+}
 
 
 /*Form*/
@@ -12,17 +18,17 @@ h1 {text-align: center;}
 
 /*Display Flights*/
 .flights-list {
-	list-style: none;
-	margin: 0 auto;
-	width: 80%;
+  list-style: none;
+  margin: 0 auto;
+  width: 80%;
     max-width: 750px;
     padding-left: 0;
 }
 
 .flight-entry {
-	text-align: center;
-	border: 2px solid black;
-	margin-top: 20px;
+  text-align: center;
+  border: 2px solid black;
+  margin-top: 20px;
     margin-bottom: 20px;
 
 }
@@ -35,5 +41,5 @@ h1 {text-align: center;}
 }
 
 #close:hover {
-	color:#fff;
+  color:#fff;
 }

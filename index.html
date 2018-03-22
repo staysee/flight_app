@@ -9,36 +9,42 @@
   <link rel="stylesheet" type="text/css" href="css/datepicker.css">
   <!-- Normalize -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 
 </head>
 <body>
 
 <div class="container">
 
-	<h1>Flight App</h1>
+  <h1>Flight App</h1>
 
 
-	<form id="search-form" action="#">
-		<label for="flight-query">Flight information:</label>
-    <input type="text" name="traveler-name" id="traveler-name" placeholder="Traveler's name">
-		<input type="text" name="flight-query" id="flight-query" placeholder="Enter airline code and flight ID"/>
-    <input type="text" id="datepicker" placeholder="Departure Date">
-		<div class="form-buttons">
-	    	<button id="add-flight-button">Add Flight</button>
-	    	<button id="reset-flights-button">Reset</button>
-	    </div>
-	</form>
+  <form id="search-form" action="#">
+    <label for="flight-query">Traveler:</label>
+      <input type="text" name="traveler-name" id="traveler-name" placeholder="Traveler's name"> <br>
+
+    <label for="flight-query">Airline Flight Number:</label>
+    <input type="text" name="flight-query" id="flight-query" placeholder="Enter airline code and flight ID"/><br>
+
+    <label for="flight-query">Departure Date:</label>
+      <input type="text" id="datepicker" placeholder="Departure Date">
+    <div class="form-buttons">
+        <button id="add-flight-button">Add Flight</button>
+        <button id="reset-flights-button">Reset</button>
+      </div>
+  </form>
 
 
-	<ul class="flights-list">
-		<!-- <li>
-			<span id='close'>x</span>
-			<div class="flight-identification">JBU1234</div>
-			<div class="flight-locations">JFK - LAX</div>
-			<div class="flight-status">Schedule On-Time</div>
-			<div class="flight-arrival">ETA: 12:30 PST</div>
-		</li> -->
-	</ul>
+  <ul class="flights-list">
+    <!-- <li>
+      <span id='close'>x</span>
+      <div class="flight-identification">JBU1234</div>
+      <div class="flight-locations">JFK - LAX</div>
+      <div class="flight-status">Schedule On-Time</div>
+      <div class="flight-arrival">ETA: 12:30 PST</div>
+    </li> -->
+  </ul>
 
 </div>
 
