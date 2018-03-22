@@ -20,14 +20,14 @@ function getDataFromApi(){
   //console.log(dep_year);
 
   $.ajax({
-    url: BASE_URL + 'airline=' + airline_code + '&flight_number=' + flight_number + '&year=' + dep_year + '&month=' + dep_month + '&day=' + dep_day,
+    url: BASE_URL+'airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
     method: 'GET',
     success: function(data){
       console.log(data);
       console.log('Flight Status: ' + data.flightStatuses[0].status);
       console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
       console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
-      console.log('ETA: ' + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
+      console.log('ETA: '+data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
       renderList(state, $('.flights-list'), data);
     },
     error: function(jqXHR, textStatus, errorThrown){
@@ -64,9 +64,9 @@ function renderList (state, element, data){
         <div class="temp-flight"></div>
         <div class="flight-traveler"></div>
         <div class="flight-identification"></div>
-        <div class="flight-locations">Departure Airport: ` + data.flightStatuses[0].departureAirportFsCode + `Arrival Airport: ` + data.flightStatuses[0].arrivalAirportFsCode + ` </div>
+        <div class="flight-locations">Airports: ` + data.flightStatuses[0].departureAirportFsCode + ` to ` + data.flightStatuses[0].arrivalAirportFsCode + ` </div>
         <div class="flight-status"> Flight Status: ` + data.flightStatuses[0].status + `</div>
-        <div class="flight-arrival">ETA: ` + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal + `</div>
+        <div class="flight-arrival">ETA to Gate: ` + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal + `</div>
       </li>
     `
   })
@@ -93,6 +93,9 @@ function handleAddFlight(){
     addFlight(state, $('#traveler-name').val());
     // renderList(state, $('.flights-list'));
 
+    $('#traveler-name').val("");
+    $('#flight-query').val("");
+    $('#datepicker').val("");
   })
 }
 
