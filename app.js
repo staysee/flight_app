@@ -33,7 +33,8 @@ function getDataFromApi(){
         $('#traveler-name').val(),
         data.flightStatuses[0].carrierFsCode,
         data.flightStatuses[0].flightNumber,
-        data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal
+        data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal,
+        data.flightStatuses[0].status
       )
       state.flights.push(flight);
     },
@@ -74,6 +75,7 @@ function getFlight (state, itemIndex){
   state.flights[itemIndex];
 }
 
+//COMMENT THIS OUT WHEN USING THE GETDATAFROMAPI FUNCTION
 function addFlight (state, flight){
   var flightquery = $('#flight-query').val();
   var airline_code = flightquery.match(/^[a-zA-z]*/);
@@ -129,8 +131,8 @@ function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
-    //getDataFromApi();
-    addFlight(state, flight);
+    getDataFromApi();       //UNCOMMENT WHEN CALLING API, COMMENT OUT ADDFLIGHT
+    //addFlight(state, flight);
     renderList(state, $('.flights-list'));
   })
 }
