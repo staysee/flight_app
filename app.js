@@ -24,10 +24,10 @@ function getDataFromApi(){
     method: 'GET',
     success: function(data){
       console.log(data);
-      console.log('Flight Status: ' + data.flightStatuses[0].status);
-      console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
-      console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
-      console.log('ETA: '+data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
+      // console.log('Flight Status: ' + data.flightStatuses[0].status);
+      // console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
+      // console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
+      // console.log('ETA: '+data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
 
       var flight = new Flight(
         $('#traveler-name').val(),
@@ -45,14 +45,28 @@ function getDataFromApi(){
 
 // State Object
 var state = {
-  flights: []
+  flights: [{
+    traveler: 'Stacey',
+    airline: 'WN',
+    flightNumber: '2158',
+    departure: '2018-03-22T05:15:00.000',
+    status: 'Scheduled'
+  },
+  {
+    traveler: 'Friend',
+    airline: 'WN',
+    flightNumber: '374',
+    departure: '2018-03-22T05:15:00.000',
+    status: 'On-Time'
+  }]
 };
 
-function Flight(traveler, airline, flightNumber, departure){
+function Flight(traveler, airline, flightNumber, departure, status){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
   this.departure = departure;
+  this.status = status
 }
 
 // State Mod Functions
@@ -60,15 +74,22 @@ function getFlight (state, itemIndex){
   state.flights[itemIndex];
 }
 
-// function addFlight (state, data){
-//   var flight = new Flight(
-//     $('#traveler-name').val(),
-//     data.flightStatuses[0].carrierFsCode,
-//     data.flightStatuses[0].flightNumber,
-//     data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal
-//   )
-//   state.flights.push(flight);
-// }
+function addFlight (state, flight){
+  var flightquery = $('#flight-query').val();
+  var airline_code = flightquery.match(/^[a-zA-z]*/);
+  var flight_number = flightquery.match(/[0-9]*$/);
+  var flightdate = $('#datepicker').val();
+  
+  var flight = new Flight(
+    $('#traveler-name').val(),
+    airline_code,
+    flight_number,
+    flightdate
+  )
+  state.flights.push(flight);
+}
+
+
 
 function deleteFlight (state, itemIndex){
   state.flights.splice(itemIndex, 1);
@@ -76,16 +97,16 @@ function deleteFlight (state, itemIndex){
 
 // Rendering
 function renderList (state, element){
+  console.log('Rendering...');
   var itemsHTML = state.flights.map(function(flight){
     return `
       <li class="flight-entry">
         <span id='close'>x</span>
-        <div class="temp-flight"></div>
-        <div class="flight-traveler"></div>
-        <div class="flight-identification"></div>
-        <div class="flight-locations">Airports: ` + data.flightStatuses[0].departureAirportFsCode + ` to ` + data.flightStatuses[0].arrivalAirportFsCode + ` </div>
-        <div class="flight-status"> Flight Status: ` + data.flightStatuses[0].status + `</div>
-        <div class="flight-arrival">ETA to Gate: ` + data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal + `</div>
+        <div class="flight-traveler">` + flight.traveler + `</div>
+        <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
+        <div class="flight-locations">Airports:</div>
+        <div class="flight-status"> Flight Status:</div>
+        <div class="flight-arrival">ETA to Gate: ` + flight.departure + `</div>
       </li>
     `
   })
@@ -104,13 +125,13 @@ function calendar(){
   });
 }
 
-function handleAddFlight(){
+function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
-    getDataFromApi();
-    //addFlight(state);
-    // renderList(state, $('.flights-list'));
+    //getDataFromApi();
+    addFlight(state, flight);
+    renderList(state, $('.flights-list'));
   })
 }
 
