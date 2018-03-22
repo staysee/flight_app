@@ -28,7 +28,14 @@ function getDataFromApi(){
       console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
       console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
       console.log('ETA: '+data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
-      renderList(state, $('.flights-list'), data);
+
+      var flight = new Flight(
+        $('#traveler-name').val(),
+        data.flightStatuses[0].carrierFsCode,
+        data.flightStatuses[0].flightNumber,
+        data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal
+      )
+      state.flights.push(flight);
     },
     error: function(jqXHR, textStatus, errorThrown){
       console.log(textStatus);
@@ -41,22 +48,34 @@ var state = {
   flights: []
 };
 
+function Flight(traveler, airline, flightNumber, departure){
+  this.traveler = traveler;
+  this.airline = airline;
+  this.flightNumber = flightNumber;
+  this.departure = departure;
+}
 
 // State Mod Functions
 function getFlight (state, itemIndex){
   state.flights[itemIndex];
 }
 
-function addFlight (state, flight){
-  state.flights.push(flight);
-}
+// function addFlight (state, data){
+//   var flight = new Flight(
+//     $('#traveler-name').val(),
+//     data.flightStatuses[0].carrierFsCode,
+//     data.flightStatuses[0].flightNumber,
+//     data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal
+//   )
+//   state.flights.push(flight);
+// }
 
 function deleteFlight (state, itemIndex){
   state.flights.splice(itemIndex, 1);
 }
 
 // Rendering
-function renderList (state, element, data){
+function renderList (state, element){
   var itemsHTML = state.flights.map(function(flight){
     return `
       <li class="flight-entry">
@@ -90,27 +109,10 @@ function handleAddFlight(){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
     getDataFromApi();
-    addFlight(state, $('#traveler-name').val());
+    //addFlight(state);
     // renderList(state, $('.flights-list'));
-
-    $('#traveler-name').val("");
-    $('#flight-query').val("");
-    $('#datepicker').val("");
-
   })
 }
-
-
-// flights: [
-//   flight = {
-//     traveler_name: $('#traveler_name').val();
-//     airline_code:  $('#flight-query').val().match(/^[a-zA-Z]*/);
-//     flight_number: $('#flight-query').val().match(/[0-9]*$/);
-//     departure_date: $('#datepicker').val();
-//   }
-// ]
-
-
 
 
 function handleDeleteFlight(){
