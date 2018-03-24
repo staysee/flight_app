@@ -3,7 +3,20 @@
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
 
 
-// API
+// -------------
+// CALENDAR UI
+//--------------
+function calendar(){
+  $('#datepicker').datepicker({
+    inline: true,
+    showOtherMonths: true,
+    dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  });
+}
+
+// ----------
+// CALL API
+// ----------
 function getDataFromApi(){
   var flightquery = $('#flight-query').val();
   var airline_code = flightquery.match(/^[a-zA-z]*/);
@@ -24,15 +37,13 @@ function getDataFromApi(){
     method: 'GET',
     success: function(data){
       console.log(data);
-      // console.log('Flight Status: ' + data.flightStatuses[0].status);
-      // console.log('Departure Airport: ' + data.flightStatuses[0].departureAirportFsCode);
-      // console.log('Arrival Airport: ' + data.flightStatuses[0].arrivalAirportFsCode);
-      // console.log('ETA: '+data.flightStatuses[0].operationalTimes.estimatedGateArrival.dateLocal);
 
       var flight = new Flight(
         $('#traveler-name').val(),
         data.flightStatuses[0].carrierFsCode,
         data.flightStatuses[0].flightNumber,
+        data.flightStatuses[0].departureAirportFsCode,
+        data.flightStatuses[0].arrivalAirportFsCode,
         data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal,
         data.flightStatuses[0].status
       )
@@ -44,44 +55,59 @@ function getDataFromApi(){
   });
 }
 
-// State Object
+
+// --------------
+// STATE OBJECT
+// --------------
 var state = {
   flights: [{
     traveler: 'Stacey',
     airline: 'WN',
     flightNumber: '2158',
-    departure: '2018-03-22T05:15:00.000',
+    airports: {
+      departure: 'LAX',
+      arrival: 'SFO'
+    },
+    departureTime: '2018-03-22T05:15:00.000',
     status: 'Scheduled'
-  },
-  {
-    traveler: 'Friend',
-    airline: 'WN',
-    flightNumber: '374',
-    departure: '2018-03-22T05:15:00.000',
-    status: 'On-Time'
   }]
 };
 
-function Flight(traveler, airline, flightNumber, departure, status){
+
+// ----------------
+// FLIGHT OBJECT
+// ----------------
+function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, departureTime, status){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
-  this.departure = departure;
-  this.status = status
+  this.airports = {
+                    departure:  departAirport,
+                    arrival:    arrivalAirport
+                  };
+  this.departureTime = departureTime;
+  this.status = status;
 }
 
-// State Mod Functions
+
+// --------------------
+// STATE MODIFICATION
+// --------------------
 function getFlight (state, itemIndex){
   state.flights[itemIndex];
 }
 
-//COMMENT THIS OUT WHEN USING THE GETDATAFROMAPI FUNCTION
+function deleteFlight (state, itemIndex){
+  state.flights.splice(itemIndex, 1);
+}
+
+//addFlight is in the ajax success function
 function addFlight (state, flight){
   var flightquery = $('#flight-query').val();
   var airline_code = flightquery.match(/^[a-zA-z]*/);
   var flight_number = flightquery.match(/[0-9]*$/);
   var flightdate = $('#datepicker').val();
-  
+
   var flight = new Flight(
     $('#traveler-name').val(),
     airline_code,
@@ -93,11 +119,9 @@ function addFlight (state, flight){
 
 
 
-function deleteFlight (state, itemIndex){
-  state.flights.splice(itemIndex, 1);
-}
-
-// Rendering
+// -------------
+// RENDERING
+// -------------
 function renderList (state, element){
   console.log('Rendering...');
   var itemsHTML = state.flights.map(function(flight){
@@ -106,9 +130,9 @@ function renderList (state, element){
         <span id='close'>x</span>
         <div class="flight-traveler">` + flight.traveler + `</div>
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
-        <div class="flight-locations">Airports:</div>
-        <div class="flight-status"> Flight Status:</div>
-        <div class="flight-arrival">ETA to Gate: ` + flight.departure + `</div>
+        <div class="flight-locations">Airports: ` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
+        <div class="flight-status"> Flight Status: ` + flight.status +`</div>
+        <div class="flight-arrival">ETA to Gate: ` + flight.departureTime + `</div>
       </li>
     `
   })
@@ -117,16 +141,9 @@ function renderList (state, element){
 
 
 
-
-// Event Listeners
-function calendar(){
-  $('#datepicker').datepicker({
-    inline: true,
-    showOtherMonths: true,
-    dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  });
-}
-
+// -----------------
+// EVENT LISTENERS
+// -----------------
 function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
@@ -134,9 +151,9 @@ function handleAddFlight(flight){
     getDataFromApi();       //UNCOMMENT WHEN CALLING API, COMMENT OUT ADDFLIGHT
     //addFlight(state, flight);
     renderList(state, $('.flights-list'));
+
   })
 }
-
 
 function handleDeleteFlight(){
   $('.flights-list').on('click', '#close', function(event){
@@ -158,6 +175,13 @@ function handleResetButton(){
 
   })
 }
+
+
+
+
+
+
+
 
 $(calendar)
 $(handleAddFlight)

@@ -10,10 +10,39 @@ body {
   font-family: 'Dosis', sans-serif;
 }
 
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
 
 /*Form*/
-#search-form { text-align: center; }
-.form-buttons { display: block; }
+#search-form {
+  margin: 0 auto;
+  border: 2px solid white;
+  min-width: 60%;
+}
+
+label {
+  float: left;
+  display: inline-block;
+  text-align: right;
+  min-width: 140px;
+}
+
+input {
+
+}
+
+.form-buttons {
+  display: block;
+  text-align: center;
+}
+
+button {
+  width: 120px;
+  background-color: #3be3f9;
+  border: 2px solid #2eb2e6;
+}
 
 
 /*Display Flights*/
@@ -28,8 +57,9 @@ body {
 .flight-entry {
   text-align: center;
   border: 2px solid white;
+  background-color: #364755;
   margin-top: 20px;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 
 }
 
