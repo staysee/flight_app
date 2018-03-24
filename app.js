@@ -120,25 +120,24 @@ function deleteFlight (state, itemIndex){
   state.flights.splice(itemIndex, 1);
 }
 
-//addFlight is in the ajax success function
-// function addFlight (state, flight){
-//   var flightquery = $('#flight-query').val();
-//   var airline_code = flightquery.match(/^[a-zA-z]*/);
-//   var flight_number = flightquery.match(/[0-9]*$/);
-//   var flightdate = $('#datepicker').val();
+function addFlight (state, flight){
+  var flightquery = $('#flight-query').val();
+  var airline_code = flightquery.match(/^[a-zA-z]*/);
+  var flight_number = flightquery.match(/[0-9]*$/);
+  var flightdate = $('#datepicker').val();
 
-//   var flight = new Flight(
-//     $('#traveler-name').val(),
-//     airline_code,
-//     flight_number,
-//     flightdate
-//   )
-//   state.flights.push(flight);
-// }
-
-//-------------
-// CHECK DELAYS
-//--------------
+  var flight = new Flight(
+    $('#traveler-name').val(),
+    data.flightStatuses[index].carrierFsCode,
+    data.flightStatuses[index].flightNumber,
+    data.flightStatuses[index].departureAirportFsCode,
+    data.flightStatuses[index].arrivalAirportFsCode,
+    data.flightStatuses[index].operationalTimes.publishedDeparture.dateLocal,
+    data.flightStatuses[index].status,
+    data.flightStatuses[index].delays
+  )
+  state.flights.push(flight);
+}
 
 // -------------
 // RENDERING
