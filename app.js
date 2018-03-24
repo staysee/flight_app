@@ -1,7 +1,7 @@
 'use strict';
 //const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
-
+let index = 0;
 
 // -------------
 // CALENDAR UI
@@ -38,14 +38,31 @@ function getDataFromApi(){
     success: function(data){
       console.log(data);
 
+      if(data.flightStatuses.length > 1){
+        //popup jquery modal with all flight choices, and set index to user selected flight
+        var modal = $('#flightModal');
+
+        $('.flight-selections').html(`<button id="choice1" value="1">hello</button>`)
+        modal.removeClass("hidden");
+
+      }
+
+      if (data.flightStatuses[index].hasOwnProperty('delays')){
+        console.log('Has delays: ' + data.flightStatuses[index].delays);
+      } else {
+        console.log ('No delays')
+      }
+
+
       var flight = new Flight(
         $('#traveler-name').val(),
-        data.flightStatuses[0].carrierFsCode,
-        data.flightStatuses[0].flightNumber,
-        data.flightStatuses[0].departureAirportFsCode,
-        data.flightStatuses[0].arrivalAirportFsCode,
-        data.flightStatuses[0].operationalTimes.publishedDeparture.dateLocal,
-        data.flightStatuses[0].status
+        data.flightStatuses[index].carrierFsCode,
+        data.flightStatuses[index].flightNumber,
+        data.flightStatuses[index].departureAirportFsCode,
+        data.flightStatuses[index].arrivalAirportFsCode,
+        data.flightStatuses[index].operationalTimes.publishedDeparture.dateLocal,
+        data.flightStatuses[index].status,
+        data.flightStatuses[index].delays
       )
       state.flights.push(flight);
     },
@@ -61,7 +78,7 @@ function getDataFromApi(){
 // --------------
 var state = {
   flights: [{
-    traveler: 'Stacey',
+    traveler: 'HARDCODED',
     airline: 'WN',
     flightNumber: '2158',
     airports: {
@@ -69,7 +86,8 @@ var state = {
       arrival: 'SFO'
     },
     departureTime: '2018-03-22T05:15:00.000',
-    status: 'Scheduled'
+    status: 'Scheduled',
+    delays: 'Delayed'
   }]
 };
 
@@ -77,7 +95,7 @@ var state = {
 // ----------------
 // FLIGHT OBJECT
 // ----------------
-function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, departureTime, status){
+function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, departureTime, status, delays){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
@@ -87,6 +105,7 @@ function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, 
                   };
   this.departureTime = departureTime;
   this.status = status;
+  this.delays = delays;
 }
 
 
@@ -102,22 +121,24 @@ function deleteFlight (state, itemIndex){
 }
 
 //addFlight is in the ajax success function
-function addFlight (state, flight){
-  var flightquery = $('#flight-query').val();
-  var airline_code = flightquery.match(/^[a-zA-z]*/);
-  var flight_number = flightquery.match(/[0-9]*$/);
-  var flightdate = $('#datepicker').val();
+// function addFlight (state, flight){
+//   var flightquery = $('#flight-query').val();
+//   var airline_code = flightquery.match(/^[a-zA-z]*/);
+//   var flight_number = flightquery.match(/[0-9]*$/);
+//   var flightdate = $('#datepicker').val();
 
-  var flight = new Flight(
-    $('#traveler-name').val(),
-    airline_code,
-    flight_number,
-    flightdate
-  )
-  state.flights.push(flight);
-}
+//   var flight = new Flight(
+//     $('#traveler-name').val(),
+//     airline_code,
+//     flight_number,
+//     flightdate
+//   )
+//   state.flights.push(flight);
+// }
 
-
+//-------------
+// CHECK DELAYS
+//--------------
 
 // -------------
 // RENDERING
@@ -125,6 +146,12 @@ function addFlight (state, flight){
 function renderList (state, element){
   console.log('Rendering...');
   var itemsHTML = state.flights.map(function(flight){
+    var hidden = "hidden";
+
+    if (flight.delays !== undefined){
+      hidden = "";
+    }
+
     return `
       <li class="flight-entry">
         <span id='close'>x</span>
@@ -133,6 +160,7 @@ function renderList (state, element){
         <div class="flight-locations">Airports: ` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
         <div class="flight-status"> Flight Status: ` + flight.status +`</div>
         <div class="flight-arrival">ETA to Gate: ` + flight.departureTime + `</div>
+        <div class="flight-delays ` + hidden + `">Delayed</div>
       </li>
     `
   })
@@ -144,6 +172,19 @@ function renderList (state, element){
 // -----------------
 // EVENT LISTENERS
 // -----------------
+function handleCitySelect(){
+  $('.flight-selections').on('click', '#choice1', function(event){
+    index = 1;
+    $('#flightModal').addClass("hidden");
+  })
+}
+
+function handleModalClose(){
+  $('.modal-close').click(function(){
+    $('#flightModal').addClass("hidden");
+  })
+}
+
 function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
@@ -178,12 +219,9 @@ function handleResetButton(){
 
 
 
-
-
-
-
-
 $(calendar)
+$(handleCitySelect)
+$(handleModalClose)
 $(handleAddFlight)
 $(handleDeleteFlight)
 $(handleResetButton)
