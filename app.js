@@ -2,6 +2,7 @@
 //const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
 let index = 0;
+var flightData;
 
 // -------------
 // CALENDAR UI
@@ -35,10 +36,12 @@ function getDataFromApi(){
   $.ajax({
     url: BASE_URL+'airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
     method: 'GET',
+    async: false,
     success: function(data){
       console.log(data);
+      flightData = data.flightStatuses;
 
-      if(data.flightStatuses.length > 1){
+      if(flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
         var modal = $('#flightModal');
 
@@ -46,25 +49,26 @@ function getDataFromApi(){
         modal.removeClass("hidden");
 
       }
+      else{
+        if (flightData[index].hasOwnProperty('delays')){
+         console.log('Has delays: ' + flightData[index].delays);
+        } else {
+          console.log ('No delays')
+       }
 
-      if (data.flightStatuses[index].hasOwnProperty('delays')){
-        console.log('Has delays: ' + data.flightStatuses[index].delays);
-      } else {
-        console.log ('No delays')
+
+        var flight = new Flight(
+          $('#traveler-name').val(),
+          flightData[index].carrierFsCode,
+          flightData[index].flightNumber,
+          flightData[index].departureAirportFsCode,
+          flightData[index].arrivalAirportFsCode,
+          flightData[index].operationalTimes.publishedDeparture.dateLocal,
+          flightData[index].status,
+          flightData[index].delays
+        )
+        state.flights.push(flight);
       }
-
-
-      var flight = new Flight(
-        $('#traveler-name').val(),
-        data.flightStatuses[index].carrierFsCode,
-        data.flightStatuses[index].flightNumber,
-        data.flightStatuses[index].departureAirportFsCode,
-        data.flightStatuses[index].arrivalAirportFsCode,
-        data.flightStatuses[index].operationalTimes.publishedDeparture.dateLocal,
-        data.flightStatuses[index].status,
-        data.flightStatuses[index].delays
-      )
-      state.flights.push(flight);
     },
     error: function(jqXHR, textStatus, errorThrown){
       console.log(textStatus);
@@ -120,23 +124,25 @@ function deleteFlight (state, itemIndex){
   state.flights.splice(itemIndex, 1);
 }
 
-function addFlight (state, flight){
-  var flightquery = $('#flight-query').val();
-  var airline_code = flightquery.match(/^[a-zA-z]*/);
-  var flight_number = flightquery.match(/[0-9]*$/);
-  var flightdate = $('#datepicker').val();
+function addFlight (state, index){
+    if (flights[index].hasOwnProperty('delays')){
+         console.log('Has delays: ' + flights[index].delays);
+        } else {
+          console.log ('No delays')
+       }
 
-  var flight = new Flight(
-    $('#traveler-name').val(),
-    data.flightStatuses[index].carrierFsCode,
-    data.flightStatuses[index].flightNumber,
-    data.flightStatuses[index].departureAirportFsCode,
-    data.flightStatuses[index].arrivalAirportFsCode,
-    data.flightStatuses[index].operationalTimes.publishedDeparture.dateLocal,
-    data.flightStatuses[index].status,
-    data.flightStatuses[index].delays
-  )
-  state.flights.push(flight);
+
+        var flight = new Flight(
+          $('#traveler-name').val(),
+          flightData[index].carrierFsCode,
+          flightData[index].flightNumber,
+          flightData[index].departureAirportFsCode,
+          flightData[index].arrivalAirportFsCode,
+          flightData[index].operationalTimes.publishedDeparture.dateLocal,
+          flightData[index].status,
+          flightData[index].delays
+        )
+        state.flights.push(flight);
 }
 
 // -------------
@@ -173,7 +179,10 @@ function renderList (state, element){
 // -----------------
 function handleCitySelect(){
   $('.flight-selections').on('click', '#choice1', function(event){
-    index = 1;
+    console.log(flights);
+    console.log(this.value);
+    var index = this.value;
+    addFlight(state, index)
     $('#flightModal').addClass("hidden");
   })
 }
