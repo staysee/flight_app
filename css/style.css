@@ -110,3 +110,7 @@ button {
 }
 
 .hidden {display: none;}
+
+.delayed{
+  background-color: red;
+}
