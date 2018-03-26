@@ -2,10 +2,16 @@
   box-sizing: border-box;
 }
 
-h1 {text-align: center;}
+h1 {
+  text-align: center;
+  color: #98521f;
+}
 
 body {
-  background-color: black;
+  background-image: url(../img/antique_map.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+/*  background-size: contain;*/
   color: white;
   font-family: 'Dosis', sans-serif;
 }
