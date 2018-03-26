@@ -110,7 +110,6 @@ button {
 }
 
 .hidden {display: none;}
-
-.delayed{
-  background-color: red;
-}
+.inflight {background-color: #17588D;}
+.landed {background-color: #17AB17;}
+.attention {background-color: #E70B0B;}

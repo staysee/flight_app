@@ -41,7 +41,6 @@ function getDataFromApi(){
       if (flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
         const modal = $('#flightModal');
-        let flightIndex = 0;
         let cityButtons = flightData.map(function(leg, flightIndex){
           return `
             <button id="choice` + flightIndex +`" value="` + flightIndex +`">` + flightData[flightIndex].arrivalAirportFsCode +`</button>
@@ -83,18 +82,20 @@ function getDataFromApi(){
 // STATE OBJECT
 // --------------
 const state = {
-              flights: [{
-                        traveler: 'HARDCODED',
-                        airline: 'WN',
-                        flightNumber: '2158',
-                        airports: {
-                                  departure: 'LAX',
-                                  arrival: 'SFO'
-                        },
-                        departureTime: '2018-03-22T05:15:00.000',
-                        status: 'Scheduled',
-                        delays: 'Delayed'
-              }]
+              flights: [
+              // {
+              //           traveler: 'HARDCODED',
+              //           airline: 'WN',
+              //           flightNumber: '2158',
+              //           airports: {
+              //                     departure: 'LAX',
+              //                     arrival: 'SFO'
+              //           },
+              //           departureTime: '2018-03-22T05:15:00.000',
+              //           status: 'Scheduled',
+              //           delays: 'Delayed'
+              // }
+              ]
 };
 
 
@@ -152,17 +153,48 @@ function addFlight (state, index){
 // -------------
 // RENDERING
 // -------------
+function checkStatus(){
+
+}
+
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
     let hidden = "hidden";
+    let status= "";
 
-    if (flight.delays !== undefined){
-      hidden = "";
+    if (flight.status === "S"){
+      flight.status = "Scheduled";
+    }
+    if (flight.status === "A"){
+      flight.status = "In Flight";
+      status = "inflight"
+    }
+    if (flight.status === "C"){
+      flight.status = "Cancelled";
+      status = "attention";
+    }
+    if (flight.status === "D"){
+      flight.status = "Diverted";
+      status = "attention";
+    }
+    if (flight.status === "L"){
+      flight.status = "Landed";
+       status = "landed";
+    }
+    if (flight.status === "R"){
+      flight.status = "Redirected";
+      status = "attention";
     }
 
+    if (flight.delays !== undefined && flight.status !== "Landed"){
+      hidden = "";
+      status = "attention";
+    }
+
+
     return `
-      <li class="flight-entry">
+      <li class="flight-entry ` + status +`">
         <span id='close'>x</span>
         <div class="flight-traveler">` + flight.traveler + `</div>
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
@@ -185,8 +217,7 @@ function handleCitySelect(){
   $('.flight-selections').on('click', 'button', function(event){
     console.log(flightData);
     console.log(this.value);
-    var index = this.value; //do i need var again?
-    addFlight(state, index)
+    addFlight(state, this.value)
     $('#flightModal').addClass("hidden");
     renderList(state, $('.flights-list'));
   })
