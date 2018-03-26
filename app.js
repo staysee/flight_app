@@ -42,7 +42,7 @@ function getDataFromApi(){
         //popup jquery modal with all flight choices, and set index to user selected flight
         const modal = $('#flightModal');
         let flightIndex = 0;
-        let cityButtons = flightData.map(function(leg){
+        let cityButtons = flightData.map(function(leg, flightIndex){
           return `
             <button id="choice` + flightIndex +`" value="` + flightIndex +`">` + flightData[flightIndex].arrivalAirportFsCode +`</button>
           `
