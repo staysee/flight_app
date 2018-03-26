@@ -1,8 +1,8 @@
 'use strict';
 //const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
-let index = 0;  //index for legs in the flight's entire route
-var flightData;
+let flightData;
+let index = 0;  //index for #flights in entire flight route
 
 // -------------
 // CALENDAR UI
@@ -46,7 +46,7 @@ function getDataFromApi(){
         modal.removeClass("hidden");
 
       }
-      else{
+      else {
         if (flightData[index].hasOwnProperty('delays')){
          console.log('Has delays: ' + flightData[index].delays);
         } else {
@@ -78,18 +78,18 @@ function getDataFromApi(){
 // STATE OBJECT
 // --------------
 const state = {
-  flights: [{
-    traveler: 'HARDCODED',
-    airline: 'WN',
-    flightNumber: '2158',
-    airports: {
-      departure: 'LAX',
-      arrival: 'SFO'
-    },
-    departureTime: '2018-03-22T05:15:00.000',
-    status: 'Scheduled',
-    delays: 'Delayed'
-  }]
+              flights: [{
+                        traveler: 'HARDCODED',
+                        airline: 'WN',
+                        flightNumber: '2158',
+                        airports: {
+                                  departure: 'LAX',
+                                  arrival: 'SFO'
+                        },
+                        departureTime: '2018-03-22T05:15:00.000',
+                        status: 'Scheduled',
+                        delays: 'Delayed'
+              }]
 };
 
 
@@ -101,9 +101,9 @@ function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, 
   this.airline = airline;
   this.flightNumber = flightNumber;
   this.airports = {
-                    departure:  departAirport,
-                    arrival:    arrivalAirport
-                  };
+                  departure:  departAirport,
+                  arrival:    arrivalAirport
+  };
   this.departureTime = departureTime;
   this.status = status;
   this.delays = delays;
@@ -122,11 +122,13 @@ function deleteFlight (state, itemIndex){
 }
 
 function addFlight (state, index){
-    if (flights[index].hasOwnProperty('delays')){
-         console.log('Has delays: ' + flights[index].delays);
-        } else {
+    if (flightData[index].hasOwnProperty('delays')){
+         console.log('Has delays: ' + flightData[index].delays);
+    
+    } else {
           console.log ('No delays')
-       }
+
+    }
 
 
         const flight = new Flight(
@@ -148,7 +150,7 @@ function addFlight (state, index){
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
-    const hidden = "hidden";
+    let hidden = "hidden";
 
     if (flight.delays !== undefined){
       hidden = "";
