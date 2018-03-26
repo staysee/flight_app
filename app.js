@@ -46,9 +46,6 @@ function getDataFromApi(){
           return `
             <button id="choice` + flightIndex +`" value="` + flightIndex +`">` + flightData[flightIndex].arrivalAirportFsCode +`</button>
           `
-          if (flightIndex < flightData.length){
-            flightIndex++;
-          }
         })
         $('.flight-selections').html(cityButtons);
         modal.removeClass("hidden");
