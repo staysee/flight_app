@@ -180,7 +180,7 @@ function handleCitySelect(){
   $('.flight-selections').on('click', '#choice1', function(event){
     console.log(flightData);
     console.log(this.value);
-    var index = this.value;
+    var index = this.value; //do i need var again? 
     addFlight(state, index)
     $('#flightModal').addClass("hidden");
   })
