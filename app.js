@@ -41,8 +41,16 @@ function getDataFromApi(){
       if (flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
         const modal = $('#flightModal');
-
-        $('.flight-selections').html(`<button id="choice1" value="1">hello</button>`)
+        let flightIndex = 0;
+        let cityButtons = flightData.map(function(leg){
+          return `
+            <button id="choice` + flightIndex +`" value="` + flightIndex +`">` + flightData[flightIndex].arrivalAirportFsCode +`</button>
+          `
+          if (flightIndex < flightData.length){
+            flightIndex++;
+          }
+        })
+        $('.flight-selections').html(cityButtons);
         modal.removeClass("hidden");
 
       }
@@ -124,7 +132,7 @@ function deleteFlight (state, itemIndex){
 function addFlight (state, index){
     if (flightData[index].hasOwnProperty('delays')){
          console.log('Has delays: ' + flightData[index].delays);
-    
+
     } else {
           console.log ('No delays')
 
@@ -180,7 +188,7 @@ function handleCitySelect(){
   $('.flight-selections').on('click', '#choice1', function(event){
     console.log(flightData);
     console.log(this.value);
-    var index = this.value; //do i need var again? 
+    var index = this.value; //do i need var again?
     addFlight(state, index)
     $('#flightModal').addClass("hidden");
   })
