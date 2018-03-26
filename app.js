@@ -178,7 +178,7 @@ function renderList (state, element){
 // -----------------
 function handleCitySelect(){
   $('.flight-selections').on('click', '#choice1', function(event){
-    console.log(flights);
+    console.log(flightData);
     console.log(this.value);
     var index = this.value;
     addFlight(state, index)
