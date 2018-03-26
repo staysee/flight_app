@@ -185,12 +185,13 @@ function renderList (state, element){
 // EVENT LISTENERS
 // -----------------
 function handleCitySelect(){
-  $('.flight-selections').on('click', '#choice1', function(event){
+  $('.flight-selections').on('click', 'button', function(event){
     console.log(flightData);
     console.log(this.value);
     var index = this.value; //do i need var again?
     addFlight(state, index)
     $('#flightModal').addClass("hidden");
+    renderList(state, $('.flights-list'));
   })
 }
 
@@ -206,7 +207,7 @@ function handleAddFlight(flight){
     console.log('Clicked Add Flight Button')
     getDataFromApi();
     renderList(state, $('.flights-list'));
-
+    $('#search-form')[0].reset();
   })
 }
 
