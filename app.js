@@ -1,7 +1,7 @@
 'use strict';
 //const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
-let index = 0;
+let index = 0;  //index for legs in the flight's entire route
 var flightData;
 
 // -------------
@@ -19,19 +19,16 @@ function calendar(){
 // CALL API
 // ----------
 function getDataFromApi(){
-  var flightquery = $('#flight-query').val();
-  var airline_code = flightquery.match(/^[a-zA-z]*/);
-  var flight_number = flightquery.match(/[0-9]*$/);
+  let flightquery = $('#flight-query').val();
+  let airline_code = flightquery.match(/^[a-zA-z]*/);
+  let flight_number = flightquery.match(/[0-9]*$/);
 
-  var flightdate = $('#datepicker').val();
-  var dateArray = flightdate.split("/");
-  var dep_month = dateArray[0];
-  var dep_day = dateArray[1];
-  var dep_year = dateArray[2];
-  //console.log(flightdate);
-  //console.log(dep_month);
-  //console.log(dep_day);
-  //console.log(dep_year);
+  let flightdate = $('#datepicker').val();
+  let dateArray = flightdate.split("/");
+  let dep_month = dateArray[0];
+  let dep_day = dateArray[1];
+  let dep_year = dateArray[2];
+
 
   $.ajax({
     url: BASE_URL+'airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
@@ -41,9 +38,9 @@ function getDataFromApi(){
       console.log(data);
       flightData = data.flightStatuses;
 
-      if(flightData.length > 1){
+      if (flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
-        var modal = $('#flightModal');
+        const modal = $('#flightModal');
 
         $('.flight-selections').html(`<button id="choice1" value="1">hello</button>`)
         modal.removeClass("hidden");
@@ -57,7 +54,7 @@ function getDataFromApi(){
        }
 
 
-        var flight = new Flight(
+        const flight = new Flight(
           $('#traveler-name').val(),
           flightData[index].carrierFsCode,
           flightData[index].flightNumber,
@@ -80,7 +77,7 @@ function getDataFromApi(){
 // --------------
 // STATE OBJECT
 // --------------
-var state = {
+const state = {
   flights: [{
     traveler: 'HARDCODED',
     airline: 'WN',
@@ -132,7 +129,7 @@ function addFlight (state, index){
        }
 
 
-        var flight = new Flight(
+        const flight = new Flight(
           $('#traveler-name').val(),
           flightData[index].carrierFsCode,
           flightData[index].flightNumber,
@@ -150,8 +147,8 @@ function addFlight (state, index){
 // -------------
 function renderList (state, element){
   console.log('Rendering...');
-  var itemsHTML = state.flights.map(function(flight){
-    var hidden = "hidden";
+  let itemsHTML = state.flights.map(function(flight){
+    const hidden = "hidden";
 
     if (flight.delays !== undefined){
       hidden = "";
@@ -197,8 +194,7 @@ function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
-    getDataFromApi();       //UNCOMMENT WHEN CALLING API, COMMENT OUT ADDFLIGHT
-    //addFlight(state, flight);
+    getDataFromApi();
     renderList(state, $('.flights-list'));
 
   })
@@ -207,7 +203,7 @@ function handleAddFlight(flight){
 function handleDeleteFlight(){
   $('.flights-list').on('click', '#close', function(event){
     var itemIndex = $(this).closest('li').index();
-    console.log(itemIndex);
+    console.log('Deleting Flight: ' + itemIndex);
     deleteFlight(state, itemIndex);
     renderList(state, $('.flights-list'));
   })
@@ -216,12 +212,9 @@ function handleDeleteFlight(){
 function handleResetButton(){
   $('#reset-flights-button').on('click', function(event){
     event.preventDefault();
-    //console.log('Reset button')
-    //location.reload();
     console.log('Clearing state');
     state.flights = [];
     renderList(state, $('.flights-list'));
-
   })
 }
 
