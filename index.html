@@ -18,18 +18,19 @@
 <div class="container">
 
   <h1>FlightTrax</h1>
+  <p>Keep track of your travel buddies' arriving flights!</p>
 
   <form id="search-form" action="#">
     <div class="row">
-      <label for="flight-query">Traveler:</label>
-      <input type="text" name="traveler-name" id="traveler-name" placeholder="Traveler's name"> <br>
+      <label for="flight-query">Traveler(s)</label>
+      <input type="text" name="traveler-name" id="traveler-name" placeholder="Jane Doe"> <br>
     </div>
 
-    <label for="flight-query">Airline Flight Number:</label>
-    <input type="text" name="flight-query" id="flight-query" placeholder="Enter airline code and flight ID" required><br>
+    <label for="flight-query">Airline Flight Number</label>
+    <input type="text" name="flight-query" id="flight-query" placeholder="ABC123" required><br>
 
-    <label for="flight-query">Departure Date:</label>
-      <input type="text" id="datepicker" placeholder="Departure Date" required>
+    <label for="flight-query">Departure Date</label>
+      <input type="text" id="datepicker" placeholder="MM/DD/YYYY" required>
     <div class="form-buttons">
         <button id="add-flight-button">Add Flight</button>
         <button id="reset-flights-button">Reset</button>
