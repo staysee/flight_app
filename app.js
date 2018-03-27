@@ -165,10 +165,11 @@ function renderList (state, element){
 
     if (flight.status === "S"){
       flight.status = "Scheduled";
+      status = "scheduled";
     }
     if (flight.status === "A"){
       flight.status = "In Flight";
-      status = "inflight"
+      status = "inflight";
     }
     if (flight.status === "C"){
       flight.status = "Cancelled";
@@ -195,10 +196,10 @@ function renderList (state, element){
 
     return `
       <li class="flight-entry ` + status +`">
-        <span id='close'>x</span>
+        <span id='close'>&times;</span>
         <div class="flight-traveler">` + flight.traveler + `</div>
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
-        <div class="flight-locations">Airports: ` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
+        <div class="flight-locations">` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
         <div class="flight-status"> Flight Status: ` + flight.status +`</div>
         <div class="flight-arrival">ETA to Gate: ` + flight.departureTime + `</div>
         <div class="flight-delays ` + hidden + `">Delayed</div>

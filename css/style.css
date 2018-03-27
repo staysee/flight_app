@@ -2,11 +2,6 @@
   box-sizing: border-box;
 }
 
-h1 {
-  text-align: center;
-  color: #98521f;
-}
-
 body {
   background-image: url(../img/antique_map.jpg);
   background-repeat: no-repeat;
@@ -16,22 +11,32 @@ body {
   font-family: 'Dosis', sans-serif;
 }
 
+h1 {
+  text-align: center;
+  font-family: 'Arvo', serif;
+  color: ##921515;
+  margin: 10px;
+}
+
 .container {
   width: 80%;
+  min-height: 400px;
   margin: 0 auto;
+  background-color: rgba(14, 25, 51, 0.85);
+  border-radius: 5px;
 }
 
 /*Form*/
 #search-form {
   margin: 0 auto;
   border: 2px solid white;
-  min-width: 60%;
+  width: 70%;
 }
 
 label {
   float: left;
   display: inline-block;
-  text-align: right;
+  text-align: center;
   min-width: 140px;
 }
 
@@ -97,19 +102,19 @@ button {
 
 .flight-entry {
   text-align: center;
-  /*border: 2px solid white;*/
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 rgb(21, 7, 7), 0 6px 20px 0 rgba(45, 39, 39, 0.82);
   background-color: #364755;
   margin-top: 20px;
   margin-bottom: 20px;
-
 }
 
 #close {
-    float:right;
-    display:inline-block;
-    padding:0px 2px;
-    background:#ccc;
+    float: right;
+    display: inline-block;
+    padding: 0px 2px;
+    color: black;
+    cursor: pointer;
+    /*background:#ccc;*/
 }
 
 #close:hover {
@@ -119,6 +124,7 @@ button {
 
 /*FLIGHT STATUS COLOR CODES*/
 .hidden {display: none;}
+.scheduled {background-color: #50575A;}
 .inflight {background-color: #17588D;}
-.landed {background-color: #17AB17;}
-.attention {background-color: #E70B0B;}
+.landed {background-color: #239018;}
+.attention {background-color: #840A08;}
