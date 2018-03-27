@@ -57,7 +57,6 @@ function getDataFromApi(){
           console.log ('No delays')
         }
 
-
         const flight = new Flight(
           $('#traveler-name').val(),
           flightData[index].carrierFsCode,
@@ -128,26 +127,23 @@ function deleteFlight (state, itemIndex){
 }
 
 function addFlight (state, index){
-    if (flightData[index].hasOwnProperty('delays')){
-         console.log('Has delays: ' + flightData[index].delays);
+  if (flightData[index].hasOwnProperty('delays')){
+       console.log('Has delays: ' + flightData[index].delays);
+  } else {
+        console.log ('No delays')
+  }
 
-    } else {
-          console.log ('No delays')
-
-    }
-
-
-        const flight = new Flight(
-          $('#traveler-name').val(),
-          flightData[index].carrierFsCode,
-          flightData[index].flightNumber,
-          flightData[index].departureAirportFsCode,
-          flightData[index].arrivalAirportFsCode,
-          flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
-          flightData[index].status,
-          flightData[index].delays
-        )
-        state.flights.push(flight);
+  const flight = new Flight(
+    $('#traveler-name').val(),
+    flightData[index].carrierFsCode,
+    flightData[index].flightNumber,
+    flightData[index].departureAirportFsCode,
+    flightData[index].arrivalAirportFsCode,
+    flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
+    flightData[index].status,
+    flightData[index].delays
+  )
+  state.flights.push(flight);
 }
 
 // -------------
@@ -168,11 +164,10 @@ function fixETA(flight){
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
+    fixETA(flight);
     let hidden = "hidden";
     let status= "";
     let delayTime = "";
-
-    fixETA(flight);
 
     if (flight.status === "S"){
       flight.status = "Scheduled";
