@@ -55,7 +55,7 @@ function getDataFromApi(){
          console.log('Has delays: ' + flightData[index].delays);
         } else {
           console.log ('No delays')
-       }
+        }
 
 
         const flight = new Flight(
@@ -64,7 +64,7 @@ function getDataFromApi(){
           flightData[index].flightNumber,
           flightData[index].departureAirportFsCode,
           flightData[index].arrivalAirportFsCode,
-          flightData[index].operationalTimes.publishedDeparture.dateLocal,
+          flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
           flightData[index].status,
           flightData[index].delays
         )
@@ -91,7 +91,7 @@ const state = {
               //                     departure: 'LAX',
               //                     arrival: 'SFO'
               //           },
-              //           departureTime: '2018-03-22T05:15:00.000',
+              //           arrivalTime: '2018-03-22T05:15:00.000',
               //           status: 'Scheduled',
               //           delays: 'Delayed'
               // }
@@ -102,7 +102,7 @@ const state = {
 // ----------------
 // FLIGHT OBJECT
 // ----------------
-function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, departureTime, status, delays){
+function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, arrivalTime, status, delays){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
@@ -110,7 +110,7 @@ function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, 
                   departure:  departAirport,
                   arrival:    arrivalAirport
   };
-  this.departureTime = departureTime;
+  this.arrivalTime = arrivalTime;
   this.status = status;
   this.delays = delays;
 }
@@ -143,7 +143,7 @@ function addFlight (state, index){
           flightData[index].flightNumber,
           flightData[index].departureAirportFsCode,
           flightData[index].arrivalAirportFsCode,
-          flightData[index].operationalTimes.publishedDeparture.dateLocal,
+          flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
           flightData[index].status,
           flightData[index].delays
         )
@@ -162,6 +162,7 @@ function renderList (state, element){
   let itemsHTML = state.flights.map(function(flight){
     let hidden = "hidden";
     let status= "";
+    let delayTime = "";
 
     if (flight.status === "S"){
       flight.status = "Scheduled";
@@ -190,7 +191,13 @@ function renderList (state, element){
 
     if (flight.delays !== undefined && flight.status !== "Landed"){
       hidden = "";
-      status = "attention";
+      if (flight.delays.arrivalGateDelayMinutes > 10){
+        status = "attention";
+        delayTime = flight.delays.arrivalGateDelayMinutes;
+      } else {
+        status = "slight-delay";
+        delayTime = flight.delays.arrivalGateDelayMinutes;
+      }
     }
 
 
@@ -201,8 +208,9 @@ function renderList (state, element){
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
         <div class="flight-locations">` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
         <div class="flight-status"> Flight Status: ` + flight.status +`</div>
-        <div class="flight-arrival">ETA to Gate: ` + flight.departureTime + `</div>
-        <div class="flight-delays ` + hidden + `">Delayed</div>
+        <div class="flight-arrival">ETA to Gate: ` + flight.arrivalTime + `</div>
+        <div class=status"><span class="flight-status">` + flight.status +`</span><span class="flight-delays ` + hidden + `"> -- Delayed: ` + delayTime
+ +` min.</span></div>
       </li>
     `
   })
