@@ -157,12 +157,22 @@ function checkStatus(){
 
 }
 
+function fixETA(flight){
+  let time = flight.arrivalTime
+  let timeSplit = time.substring(0, time.length-7).split("T");
+  let etaDate = timeSplit[0];
+  let etaTime = timeSplit[1];
+  flight.arrivalTime = timeSplit[1] + " " + timeSplit[0];
+}
+
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
     let hidden = "hidden";
     let status= "";
     let delayTime = "";
+
+    fixETA(flight);
 
     if (flight.status === "S"){
       flight.status = "Scheduled";
@@ -190,13 +200,17 @@ function renderList (state, element){
     }
 
     if (flight.delays !== undefined && flight.status !== "Landed"){
-      hidden = "";
-      if (flight.delays.arrivalGateDelayMinutes > 10){
-        status = "attention";
-        delayTime = flight.delays.arrivalGateDelayMinutes;
-      } else {
-        status = "slight-delay";
-        delayTime = flight.delays.arrivalGateDelayMinutes;
+      if (flight.delays.arrivalGateDelayMinutes !== undefined){
+        
+        hidden = "";
+        
+        if (flight.delays.arrivalGateDelayMinutes > 10){
+          status = "attention";
+          delayTime = flight.delays.arrivalGateDelayMinutes;
+        } else {
+          status = "slight-delay";
+          delayTime = flight.delays.arrivalGateDelayMinutes;
+        }
       }
     }
 
@@ -207,7 +221,6 @@ function renderList (state, element){
         <div class="flight-traveler">` + flight.traveler + `</div>
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
         <div class="flight-locations">` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
-        <div class="flight-status"> Flight Status: ` + flight.status +`</div>
         <div class="flight-arrival">ETA to Gate: ` + flight.arrivalTime + `</div>
         <div class=status"><span class="flight-status">` + flight.status +`</span><span class="flight-delays ` + hidden + `"> -- Delayed: ` + delayTime
  +` min.</span></div>

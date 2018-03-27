@@ -79,7 +79,8 @@ button {
   margin: 15% auto; /*15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 20%;
+  width: 90%;
+  min-width: 280px;
 }
 
 .modal-close {
@@ -125,6 +126,12 @@ button {
 
 #close:hover {
   color:#fff;
+}
+
+/*FLIGHT ENTRY*/
+.flight-status {
+  font-weight: bolder;
+  text-transform: uppercase;
 }
 
 
