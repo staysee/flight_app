@@ -51,11 +51,11 @@ function getDataFromApi(){
 
       }
       else {
-        if (flightData[index].hasOwnProperty('delays')){
-         console.log('Has delays: ' + flightData[index].delays);
-        } else {
-          console.log ('No delays')
-        }
+        // if (flightData[index].hasOwnProperty('delays')){
+        //  console.log('Has delays: ' + flightData[index].delays);
+        // } else {
+        //   console.log ('No delays')
+        // }
 
         const flight = new Flight(
           $('#traveler-name').val(),
@@ -128,11 +128,11 @@ function deleteFlight (state, itemIndex){
 }
 
 function addFlight (state, index){
-  if (flightData[index].hasOwnProperty('delays')){
-       console.log('Has delays: ' + flightData[index].delays);
-  } else {
-        console.log ('No delays')
-  }
+  // if (flightData[index].hasOwnProperty('delays')){
+  //      console.log('Has delays: ' + flightData[index].delays);
+  // } else {
+  //       console.log ('No delays')
+  // }
 
   const flight = new Flight(
     $('#traveler-name').val(),
