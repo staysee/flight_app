@@ -72,6 +72,7 @@ function getDataFromApi(){
     },
     error: function(jqXHR, textStatus, errorThrown){
       console.log(textStatus);
+      $('.error-msg').html("Error: Please enter a valid flight that is scheduled or departing. Check your flight information and/or its format. Airline codes must be followed by a flight number (no spaces).")
     }
   });
 }
@@ -164,7 +165,7 @@ function fixETA(flight){
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
-    fixETA(flight);
+    //fixETA(flight);
     let hidden = "hidden";
     let status= "";
     let delayTime = "";
@@ -196,9 +197,9 @@ function renderList (state, element){
 
     if (flight.delays !== undefined && flight.status !== "Landed"){
       if (flight.delays.arrivalGateDelayMinutes !== undefined){
-        
+
         hidden = "";
-        
+
         if (flight.delays.arrivalGateDelayMinutes > 10){
           status = "attention";
           delayTime = flight.delays.arrivalGateDelayMinutes;
