@@ -174,27 +174,27 @@ function renderList (state, element){
     let delayTime = "";
 
     if (flight.status === "S"){
-      //flight.status = "Scheduled";
+      flight.statusDisplay = "Scheduled";
       status = "scheduled";
     }
     if (flight.status === "A"){
-      //flight.status = "In Flight";
+      flight.statusDisplay = "In Flight";
       status = "inflight";
     }
     if (flight.status === "C"){
-      //flight.status = "Cancelled";
+      flight.statusDisplay = "Cancelled";
       status = "attention";
     }
     if (flight.status === "D"){
-      //flight.status = "Diverted";
+      flight.statusDisplay = "Diverted";
       status = "attention";
     }
     if (flight.status === "L"){
-      //flight.status = "Landed";
+      flight.statusDisplay = "Landed";
        status = "landed";
     }
     if (flight.status === "R"){
-      //flight.status = "Redirected";
+      flight.statusDisplay = "Redirected";
       status = "attention";
     }
 
@@ -221,7 +221,7 @@ function renderList (state, element){
         <div class="flight-info">` + flight.airline + flight.flightNumber + `</div>
         <div class="flight-locations">` + flight.airports.departure + ` to ` + flight.airports.arrival + `</div>
         <div class="flight-arrival">ETA to Gate: ` + flight.arrivalTime + `</div>
-        <div class=status"><span class="flight-status">` + flight.status +`</span><span class="flight-delays ` + hidden + `"> -- Delayed: ` + delayTime
+        <div class=status"><span class="flight-status">` + flight.statusDisplay +`</span><span class="flight-delays ` + hidden + `"> -- Delayed: ` + delayTime
  +` min.</span></div>
       </li>
     `
