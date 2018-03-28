@@ -11,23 +11,27 @@
   <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css"> -->
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Dosis|Arvo" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
 
 </head>
 <body>
 
+<!-- <i class="fas fa-question-circle"></i> -->
+
 <div class="container">
 
   <h1>FlightTrax</h1>
-  <p>Keep track of your travel buddies' flight arrivals!<br>
-  Add every flight to see whose flight has landed or is delayed.</p>
+  <p class="intro">Keep track of your travel buddies' flight arrivals!<br>
+  Add every flight by airline code and flight number to see whose flight has landed or is delayed.</p>
 
 
   <form id="search-form" action="#">
     <label for="traveler-name">Traveler(s)</label>
-    <input type="text" name="traveler-name" id="traveler-name" placeholder="Jane Doe"/> <br>
+    <input type="text" name="traveler-name" id="traveler-name" placeholder="(Optional)"/> <br>
 
     <label for="flight-query">Airline Code &amp; Flight Number</label>
-    <input type="text" name="flight-query" id="flight-query" placeholder="ABC123" required/><br>
+    <input type="text" name="flight-query" id="flight-query" placeholder="e.g. SWA2993 (no spaces)" required/><br>
 
     <label for="datepicker">Departure Date</label>
       <input type="text" name="datepicker" id="datepicker" placeholder="MM/DD/YYYY" required/>
@@ -43,23 +47,15 @@
   <div id="flightModal" class="modal hidden">
     <div class="modal-content">
       <span class="modal-close">&times;</span>
-      <p>Please select your destination city: </p>
+      <p class="modal-p">Please select your destination airport/city: </p>
       <ul class="flight-selections">
 
       </ul>
     </div>
   </div>
 
-
-  <ul class="flights-list">
-    <!-- <li>
-      <span id='close'>x</span>
-      <div class="flight-identification">JBU1234</div>
-      <div class="flight-locations">JFK - LAX</div>
-      <div class="flight-status">Schedule On-Time</div>
-      <div class="flight-arrival">ETA: 12:30 PST</div>
-    </li> -->
-  </ul>
+  <!-- Flight Entries -->
+  <ul class="flights-list"></ul>
 
 </div>
 

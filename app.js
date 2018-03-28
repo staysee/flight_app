@@ -41,6 +41,9 @@ function getDataFromApi(){
       if (data.hasOwnProperty("error")){
         $('.error-msg').html("ERROR: " + data.error.errorMessage);
       }
+      else if (flightData.length == 0){
+        $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
+      }
       else if (flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
         const modal = $('#flightModal');
@@ -202,7 +205,7 @@ function renderList (state, element){
       status = "attention";
     }
 
-    if (flight.delays !== undefined && flight.status !== "Landed"){
+    if (flight.delays !== undefined && flight.statusDisplay !== "Landed"){
       if (flight.delays.arrivalGateDelayMinutes !== undefined){
 
         hidden = "";
@@ -278,6 +281,7 @@ function handleResetButton(){
   $('#reset-flights-button').on('click', function(event){
     event.preventDefault();
     console.log('Clearing state');
+    $('.error-msg').html("");
     state.flights = [];
     renderList(state, $('.flights-list'));
   })
