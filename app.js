@@ -156,42 +156,45 @@ function checkStatus(){
 
 function fixETA(flight){
   let time = flight.arrivalTime
-  let timeSplit = time.substring(0, time.length-7).split("T");
-  let etaDate = timeSplit[0];
-  let etaTime = timeSplit[1];
-  flight.arrivalTime = timeSplit[1] + " " + timeSplit[0];
+
+  if (time.includes("T")){
+    let timeSplit = time.substring(0, time.length-7).split("T");
+    let etaDate = timeSplit[0];
+    let etaTime = timeSplit[1];
+    flight.arrivalTime = timeSplit[1] + " " + timeSplit[0];
+  }
 }
 
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
-    //fixETA(flight);
+    fixETA(flight);
     let hidden = "hidden";
     let status= "";
     let delayTime = "";
 
     if (flight.status === "S"){
-      flight.status = "Scheduled";
+      //flight.status = "Scheduled";
       status = "scheduled";
     }
     if (flight.status === "A"){
-      flight.status = "In Flight";
+      //flight.status = "In Flight";
       status = "inflight";
     }
     if (flight.status === "C"){
-      flight.status = "Cancelled";
+      //flight.status = "Cancelled";
       status = "attention";
     }
     if (flight.status === "D"){
-      flight.status = "Diverted";
+      //flight.status = "Diverted";
       status = "attention";
     }
     if (flight.status === "L"){
-      flight.status = "Landed";
+      //flight.status = "Landed";
        status = "landed";
     }
     if (flight.status === "R"){
-      flight.status = "Redirected";
+      //flight.status = "Redirected";
       status = "attention";
     }
 
