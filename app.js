@@ -38,7 +38,10 @@ function getDataFromApi(){
       console.log(data);
       flightData = data.flightStatuses;
 
-      if (flightData.length > 1){
+      if (data.hasOwnProperty("error")){
+        $('.error-msg').html("ERROR: " + data.error.errorMessage);
+      }
+      else if (flightData.length > 1){
         //popup jquery modal with all flight choices, and set index to user selected flight
         const modal = $('#flightModal');
         let cityButtons = flightData.map(function(leg, flightIndex){
@@ -73,6 +76,7 @@ function getDataFromApi(){
     error: function(jqXHR, textStatus, errorThrown){
       console.log(textStatus);
       $('.error-msg').html("Error: Please enter a valid flight that is scheduled or departing. Check your flight information and/or its format. Airline codes must be followed by a flight number (no spaces).")
+
     }
   });
 }
@@ -254,6 +258,7 @@ function handleAddFlight(flight){
   $('#add-flight-button').on('click', function(event){
     event.preventDefault();
     console.log('Clicked Add Flight Button')
+    $('.error-msg').html("");
     getDataFromApi();
     renderList(state, $('.flights-list'));
     $('#search-form')[0].reset();
