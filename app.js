@@ -40,28 +40,22 @@ function getDataFromApi(){
 
       if (data.hasOwnProperty("error")){
         $('.error-msg').html("ERROR: " + data.error.errorMessage);
-      }
-      else if (flightData.length == 0){
-        $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
-      }
-      else if (flightData.length > 1){
-        //popup jquery modal with all flight choices, and set index to user selected flight
-        const modal = $('#flightModal');
-        let cityButtons = flightData.map(function(leg, flightIndex){
-          return `
-            <button id="choice${flightIndex}" value="${flightIndex}">${flightData[flightIndex].arrivalAirportFsCode}</button>
-          `
+
+      } else if (flightData.length == 0){
+          $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
+
+      } else if (flightData.length > 1){
+          const modal = $('#flightModal');  //modal to show city selections
+          let cityButtons = flightData.map(function(leg, flightIndex){
+            return `
+              <button id="choice${flightIndex}" value="${flightIndex}">${flightData[flightIndex].arrivalAirportFsCode}</button>
+            `
         })
         $('.flight-selections').html(cityButtons);
         modal.removeClass("hidden");
 
       }
       else {
-        // if (flightData[index].hasOwnProperty('delays')){
-        //  console.log('Has delays: ' + flightData[index].delays);
-        // } else {
-        //   console.log ('No delays')
-        // }
 
         const flight = new Flight(
           $('#traveler-name').val(),
@@ -99,7 +93,8 @@ const state = {
               //                     arrival: 'SFO'
               //           },
               //           arrivalTime: '2018-03-22T05:15:00.000',
-              //           status: 'Scheduled',
+              //           status: 'S',
+              //           statusDisplay: 'Scheduled',
               //           delays: 'Delayed'
               // }
               ]
@@ -135,11 +130,6 @@ function deleteFlight (state, itemIndex){
 }
 
 function addFlight (state, index){
-  // if (flightData[index].hasOwnProperty('delays')){
-  //      console.log('Has delays: ' + flightData[index].delays);
-  // } else {
-  //       console.log ('No delays')
-  // }
 
   const flight = new Flight(
     $('#traveler-name').val(),
