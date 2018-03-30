@@ -183,24 +183,19 @@ function renderList (state, element){
     if (flight.status === "S"){
       flight.statusDisplay = "Scheduled";
       status = "scheduled";
-    }
-    if (flight.status === "A"){
+    } else if (flight.status === "A"){
       flight.statusDisplay = "In Flight";
       status = "inflight";
-    }
-    if (flight.status === "C"){
+    } else if (flight.status === "C"){
       flight.statusDisplay = "Cancelled";
       status = "attention";
-    }
-    if (flight.status === "D"){
+    } else if (flight.status === "D"){
       flight.statusDisplay = "Diverted";
       status = "attention";
-    }
-    if (flight.status === "L"){
+    } else if (flight.status === "L"){
       flight.statusDisplay = "Landed";
        status = "landed";
-    }
-    if (flight.status === "R"){
+    } else if (flight.status === "R"){
       flight.statusDisplay = "Redirected";
       status = "attention";
     }
