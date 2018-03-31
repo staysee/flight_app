@@ -6,7 +6,7 @@ let index = 0;  //index for #flights in entire flight route
 // -------------
 // CALENDAR UI
 //--------------
-function calendar(){
+function calendar() {
   $('#datepicker').datepicker({
     inline: true,
     showOtherMonths: true,
@@ -17,7 +17,8 @@ function calendar(){
 // ----------
 // CALL API
 // ----------
-function getDataFromApi(){
+function getDataFromApi() {
+  const has = Object.prototype.hasOwnProperty;
   let flightquery = $('#flight-query').val();
   let airline_code = flightquery.match(/^[a-zA-z]*/);
   let flight_number = flightquery.match(/[0-9]*$/);
@@ -33,29 +34,26 @@ function getDataFromApi(){
     url: BASE_URL+'?airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
     method: 'GET',
     async: false,
-    success: function(data){
-      console.log(data);
+    success: function (data){
+
       flightData = data.flightStatuses;
 
-      if (data.hasOwnProperty("error")){
+      if (has.call(data, "error")) {
         $('.error-msg').html("ERROR: " + data.error.errorMessage);
 
-      } else if (flightData.length == 0){
+      } else if (flightData.length == 0) {
           $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
 
-      } else if (flightData.length > 1){    //if flight has multiple legs, choose arrival city
+      } else if (flightData.length > 1) {    //if flight has multiple legs, choose arrival city
           const modal = $('#flightModal');  //modal to show city
           let cityButtons = flightData.map(function(leg, flightIndex){
-            return `
-              <button id="choice${flightIndex}" value="${flightIndex}">${flightData[flightIndex].arrivalAirportFsCode}</button>
-            `
-        })
-        $('.flight-selections').html(cityButtons);
-        modal.removeClass("hidden");
-
-      }
-      else {
-
+                              return `
+                                <button id="choice${flightIndex}" value="${flightIndex}">${flightData[flightIndex].arrivalAirportFsCode}</button>
+                              `
+                            });
+          $('.flight-selections').html(cityButtons);
+          modal.removeClass("hidden");
+      } else {
         const flight = new Flight(
           $('#traveler-name').val(),
           flightData[index].carrierFsCode,
@@ -69,14 +67,11 @@ function getDataFromApi(){
         state.flights.push(flight);
       }
     },
-    error: function(jqXHR, textStatus, errorThrown){
-      console.log(textStatus);
+    error: function (jqXHR, textStatus, errorThrown){
       $('.error-msg').html("Error: Please enter a valid flight that is scheduled or departing. Check your flight information and/or its format. Airline codes must be followed by a flight number (no spaces).")
-
     }
   });
 }
-
 
 // --------------
 // STATE OBJECT
@@ -85,11 +80,10 @@ const state = {
               flights: []
 };
 
-
 // ----------------
 // FLIGHT OBJECT
 // ----------------
-function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, operationalTimes, status, delays){
+function Flight (traveler, airline, flightNumber, departAirport, arrivalAirport, operationalTimes, status, delays){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
@@ -101,7 +95,6 @@ function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, 
   this.status = status;
   this.delays = delays;
 }
-
 
 // --------------------
 // STATE MODIFICATION
@@ -115,7 +108,6 @@ function deleteFlight (state, itemIndex){
 }
 
 function addFlight (state, index){
-
   const flight = new Flight(
     $('#traveler-name').val(),
     flightData[index].carrierFsCode,
@@ -132,7 +124,7 @@ function addFlight (state, index){
 // -------------
 // RENDERING
 // -------------
-function fixETA(flight){
+function fixETA (flight){
   let time = flight.operationalTimes.estimatedGateArrival.dateLocal
 
   if (time.includes("T")){
@@ -144,8 +136,7 @@ function fixETA(flight){
 }
 
 function renderList (state, element){
-  console.log('Rendering...');
-  let itemsHTML = state.flights.map(function(flight){
+  let itemsHTML = state.flights.map(function (flight){
     let delayed = "delayed";
     let status = "";
     let delayTime = "";
@@ -175,7 +166,13 @@ function renderList (state, element){
       status = "not-operational";
     }
 
-    if (flight.delays !== undefined && flight.statusDisplay !== "Landed" && flight.statusDisplay !== "Cancelled" && flight.statusDisplay !== "Diverted" && flight.statusDisplay !== "Redirected"){
+    if (
+      flight.delays !== undefined
+      && flight.statusDisplay !== "Landed"
+      && flight.statusDisplay !== "Cancelled"
+      && flight.statusDisplay !== "Diverted"
+      && flight.statusDisplay !== "Redirected"
+    ){
       if (flight.delays.arrivalGateDelayMinutes !== undefined){
 
         delayed = "";
@@ -190,14 +187,12 @@ function renderList (state, element){
       }
     }
 
-    //Some flights don't have an Estimated Gate Arrival
+    // Some flights don't have an Estimated Gate Arrival
     if (flight.operationalTimes.estimatedGateArrival !== undefined){
       fixETA(flight);
     } else {
       flight.operationalTimes.arrivalDisplay = "--:--"
     }
-
-
 
     return `
       <li class="flight-entry ${status}">
@@ -213,31 +208,26 @@ function renderList (state, element){
   element.html(itemsHTML);
 }
 
-
-
 // -----------------
 // EVENT LISTENERS
 // -----------------
-function handleCitySelect(){
-  $('.flight-selections').on('click', 'button', function(event){
-    console.log(flightData);
-    console.log(this.value);
+function handleCitySelect() {
+  $('.flight-selections').on('click', 'button', function (event){
     addFlight(state, this.value)
     $('#flightModal').addClass("hidden");
     renderList(state, $('.flights-list'));
   })
 }
 
-function handleModalClose(){
-  $('.modal-close').click(function(){
+function handleModalClose() {
+  $('.modal-close').click(function() {
     $('#flightModal').addClass("hidden");
   })
 }
 
-function handleAddFlight(flight){
-  $('#add-flight-button').on('click', function(event){
+function handleAddFlight (flight){
+  $('#add-flight-button').on('click', function (event){
     event.preventDefault();
-    console.log('Clicked Add Flight Button')
     $('.error-msg').html("");
     getDataFromApi();
     renderList(state, $('.flights-list'));
@@ -245,26 +235,22 @@ function handleAddFlight(flight){
   })
 }
 
-function handleDeleteFlight(){
-  $('.flights-list').on('click', '#close', function(event){
-    var itemIndex = $(this).closest('li').index();
-    console.log('Deleting Flight: ' + itemIndex);
+function handleDeleteFlight (){
+  $('.flights-list').on('click', '#close', function (event){
+    let itemIndex = $(this).closest('li').index();
     deleteFlight(state, itemIndex);
     renderList(state, $('.flights-list'));
   })
 }
 
-function handleResetButton(){
-  $('#reset-flights-button').on('click', function(event){
+function handleResetButton (){
+  $('#reset-flights-button').on('click', function (event){
     event.preventDefault();
-    console.log('Clearing state');
     $('.error-msg').html("");
     state.flights = [];
     renderList(state, $('.flights-list'));
   })
 }
-
-
 
 $(calendar)
 $(handleCitySelect)
