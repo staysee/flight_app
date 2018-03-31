@@ -45,7 +45,7 @@ function getDataFromApi(){
           $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
 
       } else if (flightData.length > 1){
-          const modal = $('#flightModal');  //modal to show city selections
+          const modal = $('#flightModal');  //modal to show city
           let cityButtons = flightData.map(function(leg, flightIndex){
             return `
               <button id="choice${flightIndex}" value="${flightIndex}">${flightData[flightIndex].arrivalAirportFsCode}</button>
@@ -63,7 +63,7 @@ function getDataFromApi(){
           flightData[index].flightNumber,
           flightData[index].departureAirportFsCode,
           flightData[index].arrivalAirportFsCode,
-          flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
+          flightData[index].operationalTimes,
           flightData[index].status,
           flightData[index].delays
         )
@@ -83,36 +83,22 @@ function getDataFromApi(){
 // STATE OBJECT
 // --------------
 const state = {
-              flights: [
-              // {
-              //           traveler: 'HARDCODED',
-              //           airline: 'WN',
-              //           flightNumber: '2158',
-              //           airports: {
-              //                     departure: 'LAX',
-              //                     arrival: 'SFO'
-              //           },
-              //           arrivalTime: '2018-03-22T05:15:00.000',
-              //           status: 'S',
-              //           statusDisplay: 'Scheduled',
-              //           delays: 'Delayed'
-              // }
-              ]
+              flights: []
 };
 
 
 // ----------------
 // FLIGHT OBJECT
 // ----------------
-function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, arrivalTime, status, delays){
+function Flight(traveler, airline, flightNumber, departAirport, arrivalAirport, operationalTimes, status, delays){
   this.traveler = traveler;
   this.airline = airline;
   this.flightNumber = flightNumber;
   this.airports = {
-                  departure:  departAirport,
-                  arrival:    arrivalAirport
+                  departure: departAirport,
+                  arrival: arrivalAirport
   };
-  this.arrivalTime = arrivalTime;
+  this.operationalTimes = operationalTimes;
   this.status = status;
   this.delays = delays;
 }
@@ -137,7 +123,7 @@ function addFlight (state, index){
     flightData[index].flightNumber,
     flightData[index].departureAirportFsCode,
     flightData[index].arrivalAirportFsCode,
-    flightData[index].operationalTimes.estimatedGateArrival.dateLocal,
+    flightData[index].operationalTimes,
     flightData[index].status,
     flightData[index].delays
   )
@@ -147,27 +133,22 @@ function addFlight (state, index){
 // -------------
 // RENDERING
 // -------------
-function checkStatus(){
-
-}
-
 function fixETA(flight){
-  let time = flight.arrivalTime
+  let time = flight.operationalTimes.estimatedGateArrival.dateLocal
 
   if (time.includes("T")){
     let timeSplit = time.substring(0, time.length-7).split("T");
     let etaDate = timeSplit[0];
     let etaTime = timeSplit[1];
-    flight.arrivalTime = timeSplit[1] + " " + timeSplit[0];
+    flight.operationalTimes.arrivalDisplay = timeSplit[1] + " " + timeSplit[0];
   }
 }
 
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
-    fixETA(flight);
     let hidden = "hidden";
-    let status= "";
+    let status = "";
     let delayTime = "";
 
     if (flight.status === "S"){
@@ -205,6 +186,11 @@ function renderList (state, element){
       }
     }
 
+    if (flight.operationalTimes.estimatedGateArrival!== undefined){
+      fixETA(flight);
+    } else {
+      flight.operationalTimes.arrivalDisplay = "--:--"
+    }
 
     return `
       <li class="flight-entry ${status}">
@@ -212,7 +198,7 @@ function renderList (state, element){
         <div class="flight-traveler">${flight.traveler}</div>
         <div class="flight-info">${flight.airline}${flight.flightNumber}</div>
         <div class="flight-locations">${flight.airports.departure} to ${flight.airports.arrival}</div>
-        <div class="flight-arrival">ETA to Gate: ${flight.arrivalTime}</div>
+        <div class="flight-arrival">ETA to Gate: ${flight.operationalTimes.arrivalDisplay}</div>
         <div class=status"><span class="flight-status">${flight.statusDisplay}</span><span class="flight-delays ${hidden}"> -- Delayed: ${delayTime} min.</span></div>
       </li>
     `

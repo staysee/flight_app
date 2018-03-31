@@ -65,8 +65,8 @@
 }
 .ui-datepicker th {
   text-transform: uppercase;
-  font-size: 6pt;
-  padding: 5px 0;
+  font-size: 7pt;
+  padding: 4px 0;
   color: #666666;
   text-shadow: 1px 0px 0px #fff;
   filter: dropshadow(color=#fff, offx=1, offy=0);
