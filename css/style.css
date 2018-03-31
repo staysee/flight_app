@@ -6,7 +6,7 @@ body {
   background-image: url(../img/antique_map.jpg);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  padding-top: 50px;
+  padding-top: 45px;
   color: white;
   font-family: 'Dosis', sans-serif;
 }
@@ -14,7 +14,7 @@ body {
 h1 {
   text-align: center;
   font-family: 'Arvo', serif;
-  color: #bda426;
+  color: #d8bb26;
   margin: 10px;
 }
 
@@ -57,7 +57,6 @@ h1 {
 
 label {
   float: left;
-  display: inline-block;
   min-width: 140px;
   padding-left: 2%;
 }
