@@ -1,5 +1,4 @@
 'use strict';
-//const BASE_URL = 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp'
 const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
 let flightData;
 let index = 0;  //index for #flights in entire flight route
@@ -44,7 +43,7 @@ function getDataFromApi(){
       } else if (flightData.length == 0){
           $('.error-msg').html("Sorry, the flight you entered was not found. Please try again.");
 
-      } else if (flightData.length > 1){
+      } else if (flightData.length > 1){    //if flight has multiple legs, choose arrival city
           const modal = $('#flightModal');  //modal to show city
           let cityButtons = flightData.map(function(leg, flightIndex){
             return `
@@ -186,6 +185,7 @@ function renderList (state, element){
       }
     }
 
+    //Some flights don't have an Estimated Gate Arrival
     if (flight.operationalTimes.estimatedGateArrival!== undefined){
       fixETA(flight);
     } else {
