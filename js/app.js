@@ -1,5 +1,5 @@
 'use strict';
-const BASE_URL = 'https://us-central1-sapi-framework.cloudfunctions.net/FlightStatus?';
+const BASE_URL = 'https://us-central1-flightstat-199705.cloudfunctions.net/FlightStatus';
 let flightData;
 let index = 0;  //index for #flights in entire flight route
 
@@ -30,7 +30,7 @@ function getDataFromApi(){
 
 
   $.ajax({
-    url: BASE_URL+'airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
+    url: BASE_URL+'?airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
     method: 'GET',
     async: false,
     success: function(data){
@@ -146,7 +146,7 @@ function fixETA(flight){
 function renderList (state, element){
   console.log('Rendering...');
   let itemsHTML = state.flights.map(function(flight){
-    let hidden = "hidden";
+    let delayed = "delayed";
     let status = "";
     let delayTime = "";
 
@@ -164,16 +164,21 @@ function renderList (state, element){
       status = "attention";
     } else if (flight.status === "L"){
       flight.statusDisplay = "Landed";
-       status = "landed";
+      status = "landed";
     } else if (flight.status === "R"){
       flight.statusDisplay = "Redirected";
       status = "attention";
+    } else if (flight.status === "U"){
+      flight.statusDisplay = "Unknown Status"
+    } else if (flight.status === "NO"){
+      flight.statusDisplay = "Not Operational";
+      status = "not-operational";
     }
 
-    if (flight.delays !== undefined && flight.statusDisplay !== "Landed"){
+    if (flight.delays !== undefined && flight.statusDisplay !== "Landed" && flight.statusDisplay !== "Cancelled" && flight.statusDisplay !== "Diverted" && flight.statusDisplay !== "Redirected"){
       if (flight.delays.arrivalGateDelayMinutes !== undefined){
 
-        hidden = "";
+        delayed = "";
 
         if (flight.delays.arrivalGateDelayMinutes > 10){
           status = "attention";
@@ -186,11 +191,13 @@ function renderList (state, element){
     }
 
     //Some flights don't have an Estimated Gate Arrival
-    if (flight.operationalTimes.estimatedGateArrival!== undefined){
+    if (flight.operationalTimes.estimatedGateArrival !== undefined){
       fixETA(flight);
     } else {
       flight.operationalTimes.arrivalDisplay = "--:--"
     }
+
+
 
     return `
       <li class="flight-entry ${status}">
@@ -199,7 +206,7 @@ function renderList (state, element){
         <div class="flight-info">${flight.airline}${flight.flightNumber}</div>
         <div class="flight-locations">${flight.airports.departure} to ${flight.airports.arrival}</div>
         <div class="flight-arrival">ETA to Gate: ${flight.operationalTimes.arrivalDisplay}</div>
-        <div class=status"><span class="flight-status">${flight.statusDisplay}</span><span class="flight-delays ${hidden}"> -- Delayed: ${delayTime} min.</span></div>
+        <div class=status"><span class="flight-status">${flight.statusDisplay}</span><span class="flight-delays ${delayed}"> -- Delayed: ${delayTime} min.</span></div>
       </li>
     `
   })

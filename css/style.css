@@ -109,6 +109,8 @@ button:hover {
   background-color: rgba(0, 11, 21, 0.85);
 }
 
+.hidden {display: none;}
+
 .modal-content {
   background-color: #161955;
   margin: 50% auto; /*15% from the top and centered */
@@ -189,12 +191,13 @@ button:hover {
 }
 
 /*FLIGHT STATUS COLOR CODES*/
-.hidden {display: none;}
+.delayed {display: none;}
 .scheduled {background-color: #50575A;}
 .inflight {background-color: #17588D;}
 .landed {background-color: #239018;}
 .attention {background-color: #840A08;}
 .slight-delay {background-color: #EAA30B;}
+.not-operational {background-color: #232020;}
 
 
 /*MEDIA QUERIES*/
