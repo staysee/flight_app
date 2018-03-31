@@ -16,6 +16,8 @@
   width: 100%;
   background-color: black;
 }
+
+/* MONTH SECTION */
 .ui-datepicker-header {
   background-color: black;
   color: #e0e0e0;
@@ -52,6 +54,8 @@
   float: right;
   background-position: center 0px;
 }
+
+/* DAY NAMES */
 .ui-datepicker thead {
   background-color: #f7f7f7;
   background-image: -moz-linear-gradient(top,  #f7f7f7 0%, #f1f1f1 100%);
@@ -71,6 +75,8 @@
   text-shadow: 1px 0px 0px #fff;
   filter: dropshadow(color=#fff, offx=1, offy=0);
 }
+
+/* DATES SECTION */
 .ui-datepicker tbody td {
   padding: 0;
   border-right: 1px solid #bbb;
@@ -84,6 +90,8 @@
 .ui-datepicker tbody tr:last-child {
   border-bottom: 0px;
 }
+
+/* DEFAULT, HOVER, AND ACTIVE OF DATES */
 .ui-datepicker td span, .ui-datepicker td a {
   display: inline-block;
   font-weight: bold;
@@ -129,6 +137,8 @@
   background: #f4f4f4;
   color: #b4b3b3;
 }
+
+/* FIX ACTIVE POSITION */
 .ui-datepicker-calendar td:first-child .ui-state-active {
   width: 29px;
   margin-left: 0;
