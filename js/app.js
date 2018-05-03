@@ -1,5 +1,5 @@
 'use strict';
-const BASE_URL = 'https://us-central1-flightstat-199705.cloudfunctions.net/FlightStatus';
+const BASE_URL = 'http://34.229.225.238:8080';
 let flightData;
 let index = 0;  //index for #flights in entire flight route
 
@@ -31,7 +31,7 @@ function getDataFromApi() {
 
 
   $.ajax({
-    url: BASE_URL+'?airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
+    url: BASE_URL+'/query?airline='+airline_code+'&flight_number='+flight_number+'&year='+dep_year+'&month='+dep_month+'&day='+dep_day,
     method: 'GET',
     async: false,
     success: function (data){
