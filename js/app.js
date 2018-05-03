@@ -198,7 +198,7 @@ function renderList (state, element){
       <li class="flight-entry ${status}">
         <span id='close'>&times;</span>
         <div class="flight-traveler">${flight.traveler}</div>
-        <div class="flight-info">${flight.airline}${flight.flightNumber}</div>
+        <div class="flight-info">Flight ${flight.airline}${flight.flightNumber}</div>
         <div class="flight-locations">${flight.airports.departure} to ${flight.airports.arrival}</div>
         <div class="flight-arrival">ETA to Gate: ${flight.operationalTimes.arrivalDisplay}</div>
         <div class=status"><span class="flight-status">${flight.statusDisplay}</span><span class="flight-delays ${delayed}"> -- Delayed: ${delayTime} min.</span></div>
