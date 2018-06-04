@@ -1,5 +1,5 @@
 'use strict';
-const BASE_URL = 'http://34.229.225.238:8080';
+const BASE_URL = 'https://us-central1-flightstat-199705.cloudfunctions.net/FlightStatus';
 let flightData;
 let index = 0;  //index for #flights in entire flight route
 
